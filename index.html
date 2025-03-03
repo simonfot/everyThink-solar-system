@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EveryThink Solar System</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <meta name="description" content="Interactive 3D solar system visualization for the EveryThink platform">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-container">
+        <div class="loading-solar-system">
+            <div class="loading-sun"></div>
+            <svg class="loading-orbits" viewBox="0 0 200 200">
+                <circle class="loading-orbit" cx="100" cy="100" r="30" />
+                <circle class="loading-orbit" cx="100" cy="100" r="55" />
+                <circle class="loading-orbit" cx="100" cy="100" r="80" />
+                
+                <circle class="loading-planet" cx="130" cy="100" r="3" />
+                <circle class="loading-planet" cx="45" cy="100" r="4" />
+                <circle class="loading-planet" cx="100" cy="20" r="5" />
+            </svg>
+            <div class="loading-text">Building your Thoughtverse...</div>
+        </div>
+    </div>
+
+    <!-- Solar System Status -->
+    <div id="status">
+        <div id="loading">Loading EveryThink Solar System...</div>
+        <div id="error" style="display: none; color: red;"></div>
+        <div id="alternativeView">
+            <h2>EveryThink Solar System (2D View)</h2>
+            <p>3D rendering unavailable - showing alternative view</p>
+            
+            <div class="planet" id="sun">
+                <h3>EveryThink</h3>
+                <p>The central hub connecting all ideas and concepts</p>
+            </div>
+            
+            <div class="planet" id="creates">
+                <h3>Creates</h3>
+                <p>The creative hub for making and building</p>
+                <div class="moons">
+                    <p><strong>Contains:</strong></p>
+                    <p>Marketplace</p>
+                    <p>Workshops</p>
+                </div>
+            </div>
+            
+            <div class="planet" id="curates">
+                <h3>Curates</h3>
+                <p>Where ideas are organized, collected, and shared</p>
+                <div class="moons">
+                    <p><strong>Contains:</strong></p>
+                    <p>Exhibitions</p>
+                    <p>Pop Ups</p>
+                    <p>Events</p>
+                </div>
+            </div>
+            
+            <div class="planet" id="connects">
+                <h3>Connects</h3>
+                <p>Bringing people and ideas together</p>
+                <div class="moons">
+                    <p><strong>Contains:</strong></p>
+                    <p>Directory</p>
+                    <p>Zine</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Controls -->
+    <div id="controls" style="display:none;">
+        <button id="cameraLockToggle">
+            <i class="fas fa-lock"></i> Camera Locked
+        </button>
+        <button id="resetView">Reset View</button>
+        <button id="topView">Bird's Eye View</button>
+        <button id="logoModeBtn">Logo Mode</button>
+        <div class="speedControls">
+            <label for="speedSlider">Orbit Speed</label>
+            <input type="range" id="speedSlider" class="speedSlider" min="0" max="200" value="100">
+        </div>
+    </div>
+    
+    <!-- Camera Navigation Controls -->
+    <div class="camera-arrows">
+        <div class="arrow-btn arrow-up">↑</div>
+        <div class="arrow-btn arrow-left">←</div>
+        <div class="arrow-btn arrow-center">⊙</div>
+        <div class="arrow-btn arrow-right">→</div>
+        <div class="arrow-btn arrow-down">↓</div>
+    </div>
+    
+    <!-- Planet Tooltip -->
+    <div id="planetTooltip" style="display: none;">
+        <h3 id="tooltipTitle">Planet Name</h3>
+        <p id="tooltipDescription">Description of the planet</p>
+        <div class="moons" id="tooltipMoons">
+            <p><strong>Contains:</strong></p>
+            <div id="moonsList"></div>
+        </div>
+    </div>
+    
+    <!-- Solar System Rendering Container -->
+    <div id="solarSystem"></div>
+    
+    <!-- Content Area -->
+    <div id="contentArea">
+        <h1>EveryThink Coin Project</h1>
+        
+        <div class="project-content">
+            <h2>About EveryThink Coin</h2>
+            <p>EveryThink Coin is a digital currency designed to support local communities and creative projects. It provides a way to localize money within groups, giving value to ideas and supporting innovation.</p>
+            <p>The currency is interoperable between different communities, allowing for a wide network of support while still maintaining the benefits of local economies.</p>
+        </div>
+        
+        <div class="project-content">
+            <h2>Physical & Digital</h2>
+            <p>EveryThink Coin bridges the physical and digital worlds with unique physical coins that contain NFC chips and QR codes for verification and blockchain integration.</p>
+            
+            <div class="qr-container">
+                <div class="qr-code">
+                    <!-- QR code placeholder -->
+                    <svg width="130" height="130" viewBox="0 0 100 100">
+                        <!-- QR Code pattern -->
+                        <rect x="0" y="0" width="100" height="100" fill="none" stroke="#000" stroke-width="2"></rect>
+                        <rect x="10" y="10" width="20" height="20" fill="#000"></rect>
+                        <rect x="70" y="10" width="20" height="20" fill="#000"></rect>
+                        <rect x="10" y="70" width="20" height="20" fill="#000"></rect>
+                        <rect x="40" y="40" width="20" height="20" fill="#000"></rect>
+                        <rect x="70" y="40" width="10" height="10" fill="#000"></rect>
+                        <rect x="40" y="70" width="10" height="10" fill="#000"></rect>
+                        <rect x="60" y="70" width="30" height="10" fill="#000"></rect>
+                        <rect x="60" y="80" width="10" height="10" fill="#000"></rect>
+                    </svg>
+                </div>
+                <div class="qr-info">
+                    <h3>Scan to Connect</h3>
+                    <p>Each physical coin contains a unique QR code that links to its digital counterpart on the blockchain.</p>
+                    <p>Users can scan the code to verify authenticity, check the coin's value, or transfer ownership.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="project-content">
+            <h2>Earning & Spending</h2>
+            <p>Users can earn EveryThink Coins by contributing to the community, completing tasks, or through direct purchase.</p>
+            <p>The coins can be used within specific communities, traded for goods and services, or topped up to their original value if partially spent.</p>
+        </div>
+    </div>
+    
+    <!-- Coin Icons -->
+    <div id="coinIcons">
+        <div class="coin-icon" data-section="About">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1pbmZvIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCIvPjxwYXRoIGQ9Ik0xMiAxNnYtNCIvPjxwYXRoIGQ9Ik0xMiA4aDAiLz48L3N2Zz4=" alt="About">
+        </div>
+        <div class="coin-icon" data-section="Physical">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1zY2FuLWZhY2UiPjxwYXRoIGQ9Ik0zIDdjMC0xLjEuOS0yIDItMmgycCIvPjxwYXRoIGQ9Ik0xNyA1aDJhMiAyIDAgMCAxIDIgMnYycCIvPjxwYXRoIGQ9Ik0yMSAxN3YyYTIgMiAwIDAgMS0yIDJoLTJwIi8+PHBhdGggZD0iTTcgMjFINWEyIDIgMCAwIDEtMi0ydi0ycCIvPjxwYXRoIGQ9Ik05IDl2Mkg5IiAvPjxwYXRoIGQ9Ik0xNSA5djJIMTUiIC8+PHBhdGggZD0iTSkgMTZzMSAyIDMgMiAzLTIgMy0yIiAvPjwvc3ZnPg==" alt="Physical">
+        </div>
+        <div class="coin-icon" data-section="Earning">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1jb2lucyI+PGNpcmNsZSBjeD0iOSIgY3k9IjE0IiByPSI2Ii8+PGNpcmNsZSBjeD0iMTUiIGN5PSIxMCIgcj0iNiIvPjwvc3ZnPg==" alt="Earning">
+        </div>
+    </div>
+    
+    <!-- Debug Panel -->
+    <div id="debugToggle">Show Debug</div>
+    <div id="debug" class="collapsed"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.150.0/three.min.js"></script>
+    <script src="./js/utils.js"></script>
+    <script src="./js/content.js"></script>
+    <script src="./js/main.js"></script>
+</body>
+</html>
